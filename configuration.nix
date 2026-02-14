@@ -123,7 +123,7 @@
     unzip
     
     # File manager (if not included in GNOME)
-    gnome.nautilus
+    nautilus
     
     # Terminal
     gnome.gnome-terminal
