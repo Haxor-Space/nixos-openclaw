@@ -90,12 +90,12 @@ Before submitting a PR:
 
 ### OpenClaw-Specific Contributions
 
-If you're working on OpenClaw integration:
+If you're working on OpenClaw AI integration:
 
-1. Update `openclaw.nix` with correct source information
-2. Document any dependencies or requirements
-3. Explain how to obtain game assets (if needed)
-4. Test that the game actually runs in the VM
+1. Validate the nix-openclaw input and overlay wiring
+2. Document any required tokens or channel settings
+3. Verify the OpenClaw user service starts and logs cleanly
+4. Update OPENCLAW_NOTES.md with any new requirements
 
 ### Workflow Changes
 

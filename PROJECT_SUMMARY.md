@@ -211,8 +211,8 @@ To fully test this implementation:
 
 ### File Statistics
 
-- Total files: 16 configuration/documentation files
-- Total lines: ~1,400 lines of code and documentation
+- Total files: 18 configuration/documentation files
+- Total lines: ~1,450 lines of code and documentation
 - Languages: Nix, Bash, Markdown, YAML
 - Documentation: 5 comprehensive guides
 
@@ -220,7 +220,7 @@ To fully test this implementation:
 
 1. **Test the build** on a system with Nix installed
 2. **Customize** package list in configuration.nix
-3. **Add OpenClaw** source details to openclaw.nix if desired
+3. **Configure OpenClaw AI** tokens and channels
 4. **Run VM** locally to verify functionality
 5. **Configure** GitHub Actions secrets for Cachix (optional)
 6. **Import** into GNOME Boxes for end-user experience
@@ -232,11 +232,11 @@ nixos-openclaw/
 ├── .github/
 │   └── workflows/
 │       └── build-vm.yml          # CI/CD pipeline
-├── configuration.nix              # Main config (without openclaw)
-├── configuration-with-openclaw.nix # Smart openclaw config
+├── configuration.nix              # Main config with OpenClaw AI
+├── configuration-with-openclaw.nix # Alternate OpenClaw AI config
 ├── flake.nix                      # Nix flake definition
 ├── hardware-configuration.nix     # VM hardware config
-├── openclaw.nix                   # Custom openclaw package
+├── openclaw-documents/            # OpenClaw documents
 ├── build-vm.sh                    # Build script
 ├── run-vm.sh                      # Run script
 ├── Makefile                       # Build automation
@@ -260,7 +260,7 @@ nixos-openclaw/
 - [x] .gitignore excludes build artifacts
 - [x] LICENSE file is present
 - [x] Contributing guidelines provided
-- [x] OpenClaw package definition is complete
+- [x] OpenClaw AI module wiring is complete
 - [x] Alternative configurations provided
 - [x] Build scripts include error handling
 - [x] VM configuration includes all requested features
