@@ -20,11 +20,11 @@ fi
 
 # Build the VM configuration
 echo "Building VM toplevel configuration..."
-nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L
+nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L --no-write-lock-file
 
 # Build QCOW2 image for gnome-boxes
 echo "Building QCOW2 image..."
-nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L || {
+nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L --no-write-lock-file || {
     echo "Warning: QCOW2 build failed, but toplevel succeeded."
     echo "You can still run the VM using the run-vm.sh script."
 }

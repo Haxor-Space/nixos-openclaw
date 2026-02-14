@@ -15,6 +15,8 @@
   boot.loader.grub.device = "/dev/vda";
   # Use a stable LTS kernel to avoid modules-shrunk build issues
   boot.kernelPackages = pkgs.linuxPackages_6_1 or pkgs.linuxPackages;
+  # Disable systemd initrd to avoid modules-shrunk output dependency
+  boot.initrd.systemd.enable = false;
 
   # Hostname
   networking.hostName = "openclaw-vm";

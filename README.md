@@ -29,9 +29,14 @@ OR
 # Make build script executable (if not already)
 chmod +x build-vm.sh
 
+# Generate lock file once (commit this file)
+nix flake update
+
 # Build the VM image
 ./build-vm.sh
 ```
+
+Builds use `--no-write-lock-file`, so `flake.lock` must exist and be committed.
 
 ### Running the VM Locally
 
@@ -198,7 +203,7 @@ If you encounter build errors:
 
 1. Ensure Nix is properly installed: `nix --version`
 2. Verify flakes are enabled: `nix flake show`
-3. Update nixpkgs: `nix flake update`
+3. Ensure lock file exists and is committed: `nix flake update && git add flake.lock`
 
 ### VM Won't Start
 

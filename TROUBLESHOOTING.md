@@ -37,6 +37,13 @@ git add .
 git commit -m "Update configuration"
 ```
 
+Also ensure `flake.lock` exists and is committed, because this project builds with `--no-write-lock-file`:
+```bash
+nix flake update
+git add flake.lock
+git commit -m "Lock flake inputs"
+```
+
 ### 3. Build Timeout or Memory Issues
 
 **Error:**

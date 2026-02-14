@@ -2,10 +2,10 @@
   description = "NixOS VM with OpenClaw AI chatbot";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nix-openclaw.url = "github:openclaw/nix-openclaw";
+    nix-openclaw.url = "github:openclaw/nix-openclaw/main";
   };
 
   outputs = { self, nixpkgs, home-manager, nix-openclaw }: {

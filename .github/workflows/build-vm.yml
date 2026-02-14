@@ -21,6 +21,10 @@ jobs:
         nix_path: nixpkgs=channel:nixos-unstable
         extra_nix_config: |
           experimental-features = nix-command flakes
+
+    - name: Ensure flake lock file exists
+      run: |
+        test -f flake.lock
     
     - name: Setup Cachix (optional)
       uses: cachix/cachix-action@v14
@@ -31,11 +35,11 @@ jobs:
     
     - name: Build VM configuration
       run: |
-        nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L
+        nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L --no-write-lock-file
     
     - name: Build QCOW2 image
       run: |
-        nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L
+        nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L --no-write-lock-file
       continue-on-error: true
     
     - name: Check build outputs

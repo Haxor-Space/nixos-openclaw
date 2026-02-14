@@ -13,7 +13,7 @@ help:
 # Build the VM
 build:
 	@echo "Building NixOS OpenClaw VM..."
-	nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L
+	nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L --no-write-lock-file
 
 # Run the VM
 run:
@@ -23,7 +23,7 @@ run:
 # Build QCOW2 image
 qcow:
 	@echo "Building QCOW2 image..."
-	nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L
+	nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L --no-write-lock-file
 
 # Clean build artifacts
 clean:
