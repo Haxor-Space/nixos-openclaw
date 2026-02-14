@@ -63,7 +63,7 @@
 
   home-manager.users.openclaw = { pkgs, ... }: {
     imports = [
-      nix-openclaw.homeManagerModules.default
+      (nix-openclaw.homeManagerModules.openclaw or nix-openclaw.homeManagerModules.default)
     ];
     programs.home-manager.enable = true;
     home.homeDirectory = "/home/openclaw";
