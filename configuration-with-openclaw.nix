@@ -56,7 +56,10 @@
   };
 
   # Keep the OpenClaw user service running without an active login session
-  services.logind.linger = [ "openclaw" ];
+  # Enable linger for openclaw user to keep services running
+  systemd.tmpfiles.rules = [
+    "f /var/lib/systemd/linger/openclaw 0644 root root - -"
+  ];
 
   home-manager.users.openclaw = { pkgs, ... }: {
     programs.home-manager.enable = true;
