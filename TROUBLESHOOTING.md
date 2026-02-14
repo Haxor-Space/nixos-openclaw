@@ -10,26 +10,17 @@ error: attribute 'openclaw' missing
 ```
 
 **Solution:**
-OpenClaw may not be available in your nixpkgs version. You have several options:
+The OpenClaw AI package comes from the nix-openclaw flake overlay. Make sure it is wired in.
 
-#### Option A: Comment out openclaw
-Edit `configuration.nix` and comment out the openclaw line:
-```nix
-# openclaw  # Not available in this nixpkgs version
-```
+#### Option A: Verify flake inputs and overlay
+1. Confirm `flake.nix` includes the nix-openclaw input and home-manager.
+2. Confirm `configuration.nix` sets `nixpkgs.overlays = [ nix-openclaw.overlays.default ];`.
+3. Run `nix flake update` and rebuild.
 
-#### Option B: Use custom package
-1. Update `openclaw.nix` with the correct source information
-2. Replace the configuration.nix with configuration-with-openclaw.nix:
-   ```bash
-   cp configuration-with-openclaw.nix configuration.nix
-   ```
-3. Uncomment the customOpenClaw section
-
-#### Option C: Update nixpkgs channel
+#### Option B: Pin a known-good nixpkgs channel
 Try a different nixpkgs channel in `flake.nix`:
 ```nix
-nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";  # or nixos-24.05
+nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
 ```
 
 ### 2. Flake Evaluation Errors

@@ -1,8 +1,8 @@
 # Project Summary
 
-## NixOS OpenClaw VM - Complete Implementation
+## NixOS OpenClaw AI VM - Complete Implementation
 
-This repository provides a complete NixOS virtual machine configuration designed to run OpenClaw game with GNOME desktop environment, buildable via CI/CD pipelines.
+This repository provides a complete NixOS virtual machine configuration designed to run the OpenClaw AI chatbot with a GNOME desktop environment, buildable via CI/CD pipelines.
 
 ### What Was Delivered
 
@@ -15,29 +15,22 @@ This repository provides a complete NixOS virtual machine configuration designed
 2. **configuration.nix** - Main NixOS system configuration
    - GNOME desktop environment with GDM
    - PipeWire audio system
-   - OpenGL support for gaming
+   - OpenGL support for desktop apps
    - NetworkManager for networking
    - SSH server enabled
    - Auto-login configured with workarounds
    - Multiple browsers (Chromium, Firefox)
    - Essential utilities and tools
-   - OpenClaw commented out by default (see notes)
+   - OpenClaw AI chatbot configured via home-manager
 
 3. **hardware-configuration.nix** - VM hardware configuration
    - QEMU guest profile
    - Virtio drivers
    - Standard VM storage setup
 
-4. **openclaw.nix** - Custom OpenClaw package derivation
-   - Complete package definition
-   - Dependencies specified
-   - Build instructions
-   - Ready to use when source details are finalized
-
-5. **configuration-with-openclaw.nix** - Alternative configuration
-   - Includes smart openclaw detection
-   - Fallback handling if package unavailable
-   - Can use custom package or nixpkgs version
+4. **configuration-with-openclaw.nix** - Alternative configuration
+   - Mirrors the OpenClaw AI configuration
+   - Useful for experimentation
 
 #### Build and Run Scripts
 
@@ -90,11 +83,10 @@ This repository provides a complete NixOS virtual machine configuration designed
     - Development tips
     - Useful commands
 
-12. **OPENCLAW_NOTES.md** - OpenClaw-specific documentation
-    - Package availability notes
-    - Custom derivation guide
-    - Asset requirements
-    - Alternative options
+12. **OPENCLAW_NOTES.md** - OpenClaw AI documentation
+   - Required tokens and channels
+   - Service status commands
+   - References
 
 13. **QUICKREF.md** - Quick reference card
     - Essential commands
@@ -152,18 +144,11 @@ This repository provides a complete NixOS virtual machine configuration designed
 - Contributing guidelines
 - OpenClaw-specific notes
 
-### OpenClaw Integration Status
+### OpenClaw AI Integration Status
 
-The openclaw package is **commented out** by default in `configuration.nix` because:
-1. OpenClaw may not be available in all nixpkgs channels
-2. Package name/availability varies
-3. Game requires separate assets not included in package
-
-**Options provided:**
-1. Use `configuration-with-openclaw.nix` for smart detection
-2. Uncomment openclaw in `configuration.nix` if available in your channel
-3. Use custom `openclaw.nix` derivation (requires source details)
-4. Build VM without openclaw and install separately
+The OpenClaw chatbot is provided by the nix-openclaw flake input and configured via
+home-manager for the `openclaw` user. You must set a real gateway token and at least
+one channel before the service will respond.
 
 ### Testing Recommendations
 
@@ -196,11 +181,10 @@ To fully test this implementation:
 
 ### Dependencies Met
 
-✅ All openclaw dependencies included:
-- SDL2 libraries (when using custom package)
-- Graphics libraries
-- Audio system (PipeWire)
-- OpenGL support
+✅ OpenClaw AI gateway + tools:
+- nix-openclaw input wired into the flake
+- Home Manager module enabled
+- Systemd user service configured
 
 ✅ Supplementary programs:
 - Chromium browser
@@ -286,7 +270,7 @@ nixos-openclaw/
 
 ✅ **Create a NixOS project** - Complete flake-based NixOS configuration  
 ✅ **Launch in GNOME Boxes** - QCOW2 image build support included  
-✅ **OpenClaw pre-installed** - Configuration ready (needs package availability)  
+✅ **OpenClaw AI pre-installed** - Configuration ready (needs tokens)  
 ✅ **Package VM** - Multiple build outputs (VM, QCOW2)  
 ✅ **Build via pipelines** - GitHub Actions workflow configured  
 ✅ **All dependencies** - Complete package list with dependencies  
