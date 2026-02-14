@@ -1,17 +1,13 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, nix-openclaw, ... }:
 
-let
-  # Uncomment this to use custom openclaw package
-  # customOpenClaw = pkgs.callPackage ./openclaw.nix {};
-  
-  # Helper function to safely include openclaw if it exists
-  tryOpenClaw = builtins.tryEval (pkgs.openclaw or null);
-  hasOpenClaw = tryOpenClaw.success && tryOpenClaw.value != null;
-  
-in {
+{
   # Import hardware configuration for VM
   imports = [
     ./hardware-configuration.nix
+  ];
+
+  nixpkgs.overlays = [
+    nix-openclaw.overlays.default
   ];
 
   # Boot configuration for VM
@@ -35,7 +31,6 @@ in {
   };
 
   # Enable sound
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -48,7 +43,6 @@ in {
   # Enable OpenGL for gaming
   hardware.opengl = {
     enable = true;
-    driSupport = true;
     driSupport32Bit = true;
   };
 
@@ -59,6 +53,38 @@ in {
     extraGroups = [ "networkmanager" "wheel" "audio" "video" ];
     # Note: Using initialPassword instead of password for better security
     initialPassword = "openclaw";
+  };
+
+  # Keep the OpenClaw user service running without an active login session
+  services.logind.linger = [ "openclaw" ];
+
+  home-manager.users.openclaw = { pkgs, ... }: {
+    programs.home-manager.enable = true;
+    home.homeDirectory = "/home/openclaw";
+    home.stateVersion = "24.05";
+
+    programs.openclaw = {
+      enable = true;
+      documents = ./openclaw-documents;
+
+      # Replace the token before using the chatbot.
+      config = {
+        gateway = {
+          mode = "local";
+          auth = {
+            token = "CHANGE_ME";
+          };
+        };
+      };
+
+      instances.default = {
+        enable = true;
+        package = pkgs.openclaw;
+        stateDir = "/home/openclaw/.openclaw";
+        workspaceDir = "/home/openclaw/.openclaw/workspace";
+        plugins = [ ];
+      };
+    };
   };
 
   # Enable automatic login for convenience in VM
@@ -73,6 +99,9 @@ in {
 
   # System packages
   environment.systemPackages = with pkgs; [
+    # OpenClaw AI chatbot (from nix-openclaw)
+    openclaw
+
     # Web browsers
     chromium
     firefox
@@ -100,13 +129,9 @@ in {
     # Text editor
     gnome.gedit
     
-    # Alternative games for testing
-    supertux
-    
-  ] ++ lib.optional hasOpenClaw pkgs.openclaw
-    # Uncomment below to use custom openclaw package instead
-    # ++ [ customOpenClaw ]
-  ;
+    # Optional games for testing the VM
+    # supertux
+  ];
 
   # Enable guest additions for better VM integration
   virtualisation.vmVariant = {

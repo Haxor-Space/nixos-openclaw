@@ -1,9 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nix-openclaw, ... }:
 
 {
   # Import hardware configuration for VM
   imports = [
     ./hardware-configuration.nix
+  ];
+
+  nixpkgs.overlays = [
+    nix-openclaw.overlays.default
   ];
 
   # Boot configuration for VM
@@ -27,7 +31,6 @@
   };
 
   # Enable sound
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -40,7 +43,6 @@
   # Enable OpenGL for gaming
   hardware.opengl = {
     enable = true;
-    driSupport = true;
     driSupport32Bit = true;
   };
 
@@ -51,6 +53,38 @@
     extraGroups = [ "networkmanager" "wheel" "audio" "video" ];
     # Note: Using initialPassword for first boot (can be changed by user)
     initialPassword = "openclaw";
+  };
+
+  # Keep the OpenClaw user service running without an active login session
+  services.logind.linger = [ "openclaw" ];
+
+  home-manager.users.openclaw = { pkgs, ... }: {
+    programs.home-manager.enable = true;
+    home.homeDirectory = "/home/openclaw";
+    home.stateVersion = "24.05";
+
+    programs.openclaw = {
+      enable = true;
+      documents = ./openclaw-documents;
+
+      # Replace the token before using the chatbot.
+      config = {
+        gateway = {
+          mode = "local";
+          auth = {
+            token = "CHANGE_ME";
+          };
+        };
+      };
+
+      instances.default = {
+        enable = true;
+        package = pkgs.openclaw;
+        stateDir = "/home/openclaw/.openclaw";
+        workspaceDir = "/home/openclaw/.openclaw/workspace";
+        plugins = [ ];
+      };
+    };
   };
 
   # Enable automatic login for convenience in VM
@@ -65,10 +99,8 @@
 
   # System packages
   environment.systemPackages = with pkgs; [
-    # OpenClaw game - see OPENCLAW_NOTES.md if build fails
-    # Note: openclaw may not be in all nixpkgs channels
-    # Uncomment the line below if package is available:
-    # openclaw
+    # OpenClaw AI chatbot (from nix-openclaw)
+    openclaw
     
     # Web browser
     chromium
@@ -90,8 +122,7 @@
     # Terminal
     gnome.gnome-terminal
     
-    # Games (alternatives if openclaw is not available)
-    # Uncomment any of these for testing the VM:
+    # Optional games for testing the VM
     # supertux
     # supertuxkart
     # 0ad
