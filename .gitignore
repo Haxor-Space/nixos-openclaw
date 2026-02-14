@@ -1,0 +1,24 @@
+# Build artifacts
+result
+result-*
+*.qcow2
+*.img
+*.iso
+
+# Nix build outputs
+/result
+/result-*
+
+# VM runtime files
+*.vdi
+*.vmdk
+
+# Temporary files
+*.log
+*.tmp
+*~
+.*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db

@@ -1,2 +1,206 @@
-# nixos-openclaw
-a repo to launch nixos with openclaw
+# NixOS OpenClaw VM
+
+A NixOS virtual machine configuration with OpenClaw game pre-installed, designed to run in GNOME Boxes or any QEMU-compatible virtualization platform.
+
+## Overview
+
+This repository provides a complete NixOS configuration that includes:
+- **OpenClaw** - The open-source implementation of the classic Claw platformer game
+- **GNOME Desktop Environment** - Full desktop experience with GNOME
+- **Chromium Browser** - For web browsing
+- **Essential utilities** - vim, git, htop, and more
+
+## Prerequisites
+
+- **Nix package manager** with flakes support
+  - Install: `curl -L https://nixos.org/nix/install | sh`
+  - Enable flakes: Add `experimental-features = nix-command flakes` to `~/.config/nix/nix.conf`
+
+OR
+
+- **NixOS system** (if building on NixOS directly)
+
+## Quick Start
+
+### Building the VM
+
+```bash
+# Make build script executable (if not already)
+chmod +x build-vm.sh
+
+# Build the VM image
+./build-vm.sh
+```
+
+### Running the VM Locally
+
+```bash
+# Run the VM with QEMU
+./run-vm.sh
+```
+
+**Note:** Use `Ctrl+Alt+G` to release mouse/keyboard from the VM window.
+
+### Importing into GNOME Boxes
+
+1. Build the QCOW2 image: `nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow`
+2. Open GNOME Boxes
+3. Click the "+" button to create a new box
+4. Select "Import a machine" or "Create from file"
+5. Navigate to `result-qcow/nixos.qcow2`
+6. Follow the import wizard
+
+## VM Configuration
+
+### Default Credentials
+
+- **Username:** `openclaw`
+- **Password:** `openclaw`
+
+**Important:** Change the default password after first login!
+
+### System Specifications
+
+- **RAM:** 4GB (configurable in `configuration.nix`)
+- **CPU Cores:** 2 (configurable in `configuration.nix`)
+- **Desktop:** GNOME with GDM display manager
+- **Auto-login:** Enabled for convenience
+
+### Installed Software
+
+- OpenClaw game
+- Chromium web browser
+- GNOME desktop and applications
+- Basic utilities (vim, wget, curl, git, htop)
+- SSH server (enabled, password authentication allowed)
+
+## Building via CI/CD
+
+This repository includes a GitHub Actions workflow that automatically builds the VM image on every push.
+
+### Workflow Features
+
+- Builds on every push to main/master branches and PRs
+- Uses Nix with flakes support
+- Optional Cachix integration for faster builds
+- Uploads VM artifacts for main/master branch builds
+- Can be manually triggered via workflow_dispatch
+
+### Setting up Cachix (Optional)
+
+To speed up builds with caching:
+
+1. Create a cache at [cachix.org](https://cachix.org)
+2. Add `CACHIX_AUTH_TOKEN` to repository secrets
+3. Update the cache name in `.github/workflows/build-vm.yml`
+
+## Customization
+
+### Adding More Packages
+
+Edit `configuration.nix` and add packages to the `environment.systemPackages` list:
+
+```nix
+environment.systemPackages = with pkgs; [
+  openclaw
+  chromium
+  # Add your packages here
+  firefox
+  libreoffice
+];
+```
+
+### Changing VM Resources
+
+Edit the `virtualisation.vmVariant` section in `configuration.nix`:
+
+```nix
+virtualisation.vmVariant = {
+  virtualisation.memorySize = 8192;  # 8GB RAM
+  virtualisation.cores = 4;           # 4 CPU cores
+};
+```
+
+### Disabling Auto-login
+
+Edit `configuration.nix` and remove or comment out:
+
+```nix
+services.displayManager.autoLogin = {
+  enable = true;
+  user = "openclaw";
+};
+```
+
+## Manual Build Commands
+
+### Build VM configuration only
+```bash
+nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel
+```
+
+### Build QCOW2 image
+```bash
+nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow
+```
+
+### Build and run VM
+```bash
+nix run .#nixosConfigurations.openclaw-vm.config.system.build.vm
+```
+
+## File Structure
+
+```
+.
+├── flake.nix                  # Nix flake configuration
+├── configuration.nix          # NixOS system configuration
+├── hardware-configuration.nix # VM hardware configuration
+├── build-vm.sh               # Build script
+├── run-vm.sh                 # VM run script
+├── .github/workflows/        # GitHub Actions workflows
+│   └── build-vm.yml         # VM build workflow
+└── README.md                 # This file
+```
+
+## Troubleshooting
+
+### Build Errors
+
+If you encounter build errors:
+1. Ensure Nix is properly installed: `nix --version`
+2. Verify flakes are enabled: `nix flake show`
+3. Update nixpkgs: `nix flake update`
+
+### VM Won't Start
+
+1. Check virtualization is enabled in BIOS
+2. Ensure QEMU is available: `which qemu-system-x86_64`
+3. Try running with more verbose output
+
+### OpenClaw Not Working
+
+If OpenClaw doesn't launch:
+1. Ensure you have the game assets (may need to be provided separately)
+2. Check OpenClaw documentation for asset requirements
+3. Verify OpenGL/graphics drivers are working in the VM
+
+## Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test the build
+5. Submit a pull request
+
+## License
+
+This configuration is provided as-is. OpenClaw itself is licensed separately - please refer to the OpenClaw project for its license terms.
+
+## References
+
+- [NixOS Manual](https://nixos.org/manual/nixos/stable/)
+- [Nix Flakes](https://nixos.wiki/wiki/Flakes)
+- [OpenClaw Project](https://github.com/topic/openclaw) (search GitHub for the actual implementation)
+- [GNOME Boxes](https://help.gnome.org/users/gnome-boxes/stable/)
