@@ -1,6 +1,14 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
+let
+  # Uncomment this to use custom openclaw package
+  # customOpenClaw = pkgs.callPackage ./openclaw.nix {};
+  
+  # Helper function to safely include openclaw if it exists
+  tryOpenClaw = builtins.tryEval (pkgs.openclaw or null);
+  hasOpenClaw = tryOpenClaw.success && tryOpenClaw.value != null;
+  
+in {
   # Import hardware configuration for VM
   imports = [
     ./hardware-configuration.nix
@@ -49,7 +57,7 @@
     isNormalUser = true;
     description = "OpenClaw User";
     extraGroups = [ "networkmanager" "wheel" "audio" "video" ];
-    # Note: Using initialPassword for first boot (can be changed by user)
+    # Note: Using initialPassword instead of password for better security
     initialPassword = "openclaw";
   };
 
@@ -65,12 +73,7 @@
 
   # System packages
   environment.systemPackages = with pkgs; [
-    # OpenClaw game - see OPENCLAW_NOTES.md if build fails
-    # Note: openclaw may not be in all nixpkgs channels
-    # Uncomment the line below if package is available:
-    # openclaw
-    
-    # Web browser
+    # Web browsers
     chromium
     firefox
     
@@ -84,18 +87,26 @@
     file
     unzip
     
+    # Development tools (optional)
+    gcc
+    gnumake
+    
     # File manager (if not included in GNOME)
     gnome.nautilus
     
     # Terminal
     gnome.gnome-terminal
     
-    # Games (alternatives if openclaw is not available)
-    # Uncomment any of these for testing the VM:
-    # supertux
-    # supertuxkart
-    # 0ad
-  ];
+    # Text editor
+    gnome.gedit
+    
+    # Alternative games for testing
+    supertux
+    
+  ] ++ lib.optional hasOpenClaw pkgs.openclaw
+    # Uncomment below to use custom openclaw package instead
+    # ++ [ customOpenClaw ]
+  ;
 
   # Enable guest additions for better VM integration
   virtualisation.vmVariant = {
