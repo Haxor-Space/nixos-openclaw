@@ -25,8 +25,11 @@ stdenv.mkDerivation rec {
     # Use the latest stable tag or commit
     # You may need to update this to the actual latest version
     rev = "1.0";  # Update this with actual tag/commit
-    sha256 = lib.fakeSha256;  # Replace with actual hash after first build
-    # To get the hash, run the build once, it will fail and show the actual hash
+    sha256 = lib.fakeHash;  # Replace with actual hash after first build
+    # To get the hash:
+    # 1. Run the build once - it will fail
+    # 2. Copy the hash from the error message
+    # 3. Replace lib.fakeHash with the actual hash string
   };
 
   nativeBuildInputs = [
