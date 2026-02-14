@@ -110,6 +110,29 @@ environment.systemPackages = with pkgs; [
 ];
 ```
 
+### Configuring OpenClaw AI
+
+Edit `configuration.nix` and set your gateway token plus a channel provider:
+
+```nix
+programs.openclaw.config = {
+  gateway = {
+    mode = "local";
+    auth = { token = "REPLACE_ME"; };
+  };
+  channels.telegram = {
+    tokenFile = "/var/lib/openclaw/secrets/telegram-token";
+    allowFrom = [ 12345678 ];
+  };
+};
+```
+
+Then rebuild and restart the service:
+
+```bash
+systemctl --user restart openclaw-gateway
+```
+
 ### Changing VM Resources
 
 Edit the `virtualisation.vmVariant` section in `configuration.nix`:
