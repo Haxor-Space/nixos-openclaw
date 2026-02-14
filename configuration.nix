@@ -59,6 +59,9 @@
   services.logind.linger = [ "openclaw" ];
 
   home-manager.users.openclaw = { pkgs, ... }: {
+    imports = [
+      nix-openclaw.homeManagerModules.openclaw
+    ];
     programs.home-manager.enable = true;
     home.homeDirectory = "/home/openclaw";
     home.stateVersion = "24.05";

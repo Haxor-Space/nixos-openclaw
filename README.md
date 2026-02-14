@@ -5,6 +5,7 @@ A NixOS virtual machine configuration with the OpenClaw AI chatbot gateway pre-i
 ## Overview
 
 This repository provides a complete NixOS configuration that includes:
+
 - **OpenClaw AI** - The OpenClaw chatbot gateway and tools (via nix-openclaw)
 - **GNOME Desktop Environment** - Full desktop experience with GNOME
 - **Chromium Browser** - For web browsing
@@ -158,16 +159,19 @@ services.displayManager.autoLogin = {
 ## Manual Build Commands
 
 ### Build VM configuration only
+
 ```bash
 nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel
 ```
 
 ### Build QCOW2 image
+
 ```bash
 nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow
 ```
 
 ### Build and run VM
+
 ```bash
 nix run .#nixosConfigurations.openclaw-vm.config.system.build.vm
 ```
@@ -191,6 +195,7 @@ nix run .#nixosConfigurations.openclaw-vm.config.system.build.vm
 ### Build Errors
 
 If you encounter build errors:
+
 1. Ensure Nix is properly installed: `nix --version`
 2. Verify flakes are enabled: `nix flake show`
 3. Update nixpkgs: `nix flake update`
@@ -204,6 +209,7 @@ If you encounter build errors:
 ### OpenClaw Not Working
 
 If OpenClaw doesn't respond:
+
 1. Verify the user service is running: `systemctl --user status openclaw-gateway`
 2. Check logs: `journalctl --user -u openclaw-gateway -f`
 3. Ensure `programs.openclaw.config` has a valid gateway token and channel config
@@ -211,6 +217,7 @@ If OpenClaw doesn't respond:
 ## Contributing
 
 Contributions are welcome! Please:
+
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
