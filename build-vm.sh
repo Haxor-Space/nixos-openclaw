@@ -3,6 +3,8 @@
 # Build script for NixOS OpenClaw VM
 set -e
 
+NIX_FLAGS=(--extra-experimental-features "nix-command flakes" --accept-flake-config)
+
 echo "Building NixOS OpenClaw VM..."
 
 # Check if Nix is installed
@@ -12,19 +14,13 @@ if ! command -v nix &> /dev/null; then
     exit 1
 fi
 
-# Check if flakes are enabled
-if ! nix eval --help | grep -q "experimental"; then
-    echo "Note: Experimental features may need to be enabled."
-    echo "Run: nix --experimental-features 'nix-command flakes' build"
-fi
-
 # Build the VM configuration
 echo "Building VM toplevel configuration..."
-nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L --no-write-lock-file
+nix "${NIX_FLAGS[@]}" build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L --no-write-lock-file
 
 # Build QCOW2 image for gnome-boxes
 echo "Building QCOW2 image..."
-nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L --no-write-lock-file || {
+nix "${NIX_FLAGS[@]}" build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L --no-write-lock-file || {
     echo "Warning: QCOW2 build failed, but toplevel succeeded."
     echo "You can still run the VM using the run-vm.sh script."
 }

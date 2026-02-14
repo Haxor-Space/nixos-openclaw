@@ -1,5 +1,7 @@
 .PHONY: help build run clean update check
 
+NIX_FLAGS=--extra-experimental-features "nix-command flakes" --accept-flake-config
+
 # Default target
 help:
 	@echo "NixOS OpenClaw VM - Available targets:"
@@ -13,7 +15,7 @@ help:
 # Build the VM
 build:
 	@echo "Building NixOS OpenClaw VM..."
-	nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L --no-write-lock-file
+	nix $(NIX_FLAGS) build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L --no-write-lock-file
 
 # Run the VM
 run:
@@ -23,7 +25,7 @@ run:
 # Build QCOW2 image
 qcow:
 	@echo "Building QCOW2 image..."
-	nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L --no-write-lock-file
+	nix $(NIX_FLAGS) build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L --no-write-lock-file
 
 # Clean build artifacts
 clean:
@@ -33,9 +35,9 @@ clean:
 # Update flake dependencies
 update:
 	@echo "Updating flake inputs..."
-	nix flake update
+	nix $(NIX_FLAGS) flake update
 
 # Check flake configuration
 check:
 	@echo "Checking flake configuration..."
-	nix flake check
+	nix $(NIX_FLAGS) flake check
