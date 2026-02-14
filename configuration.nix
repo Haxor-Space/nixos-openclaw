@@ -124,7 +124,7 @@
     nautilus
     
     # Terminal
-    .gnome-terminal
+    pkgs.gnome-terminal
     
     # Optional games for testing the VM
     # supertux
