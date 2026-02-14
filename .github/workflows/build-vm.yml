@@ -24,7 +24,17 @@ jobs:
 
     - name: Ensure flake lock file exists
       run: |
-        test -f flake.lock
+        if [ ! -f flake.lock ]; then
+          echo "::warning::flake.lock is missing. Generating a temporary lock file for this CI run. Commit flake.lock to keep builds reproducible."
+          nix flake lock
+        fi
+
+    - name: Upload flake lock file
+      uses: actions/upload-artifact@v4
+      with:
+        name: flake-lock
+        path: flake.lock
+        retention-days: 7
     
     - name: Setup Cachix (optional)
       uses: cachix/cachix-action@v14
