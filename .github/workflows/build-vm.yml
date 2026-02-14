@@ -22,11 +22,11 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
 
-    - name: Ensure flake lock file exists
+    - name: Validate flake lock file
       run: |
         if [ ! -f flake.lock ]; then
-          echo "::warning::flake.lock is missing. Generating a temporary lock file for this CI run. Commit flake.lock to keep builds reproducible."
-          nix flake lock
+          echo "::error::flake.lock is missing. Run 'nix flake lock' locally and commit flake.lock before CI builds."
+          exit 1
         fi
 
     - name: Upload flake lock file

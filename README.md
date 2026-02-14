@@ -29,14 +29,13 @@ OR
 # Make build script executable (if not already)
 chmod +x build-vm.sh
 
-# Generate lock file once (commit this file)
-nix flake update
-
 # Build the VM image
 ./build-vm.sh
 ```
 
-Builds use `--no-write-lock-file`, so `flake.lock` must exist and be committed.
+`build-vm.sh` auto-generates `flake.lock` for local runs when missing.
+
+CI builds still require `flake.lock` to be present and committed.
 
 ### Running the VM Locally
 

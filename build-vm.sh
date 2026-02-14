@@ -3,7 +3,11 @@
 # Build script for NixOS OpenClaw VM
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 NIX_FLAGS=(--extra-experimental-features "nix-command flakes" --accept-flake-config)
+CI_MODE="${CI:-}"
 
 echo "Building NixOS OpenClaw VM..."
 
@@ -12,6 +16,19 @@ if ! command -v nix &> /dev/null; then
     echo "Error: Nix is not installed. Please install Nix first:"
     echo "  curl -L https://nixos.org/nix/install | sh"
     exit 1
+fi
+
+# Ensure flake.lock exists for reproducible builds.
+# In local/dev runs, generate it if missing.
+# In CI, require it to be present and committed.
+if [[ ! -f flake.lock ]]; then
+    if [[ -n "$CI_MODE" ]]; then
+        echo "Error: flake.lock is missing in CI. Commit flake.lock before running CI builds."
+        exit 1
+    fi
+
+    echo "flake.lock not found. Generating lock file for local build..."
+    nix "${NIX_FLAGS[@]}" flake lock
 fi
 
 # Build the VM configuration
