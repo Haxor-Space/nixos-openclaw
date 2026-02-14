@@ -1,11 +1,11 @@
-# NixOS OpenClaw VM
+# NixOS OpenClaw AI VM
 
-A NixOS virtual machine configuration with OpenClaw game pre-installed, designed to run in GNOME Boxes or any QEMU-compatible virtualization platform.
+A NixOS virtual machine configuration with the OpenClaw AI chatbot gateway pre-installed, designed to run in GNOME Boxes or any QEMU-compatible virtualization platform.
 
 ## Overview
 
 This repository provides a complete NixOS configuration that includes:
-- **OpenClaw** - The open-source implementation of the classic Claw platformer game
+- **OpenClaw AI** - The OpenClaw chatbot gateway and tools (via nix-openclaw)
 - **GNOME Desktop Environment** - Full desktop experience with GNOME
 - **Chromium Browser** - For web browsing
 - **Essential utilities** - vim, git, htop, and more
@@ -68,7 +68,7 @@ chmod +x build-vm.sh
 
 ### Installed Software
 
-- OpenClaw game
+- OpenClaw AI chatbot (gateway + tools)
 - Chromium web browser
 - GNOME desktop and applications
 - Basic utilities (vim, wget, curl, git, htop)
@@ -180,10 +180,10 @@ If you encounter build errors:
 
 ### OpenClaw Not Working
 
-If OpenClaw doesn't launch:
-1. Ensure you have the game assets (may need to be provided separately)
-2. Check OpenClaw documentation for asset requirements
-3. Verify OpenGL/graphics drivers are working in the VM
+If OpenClaw doesn't respond:
+1. Verify the user service is running: `systemctl --user status openclaw-gateway`
+2. Check logs: `journalctl --user -u openclaw-gateway -f`
+3. Ensure `programs.openclaw.config` has a valid gateway token and channel config
 
 ## Contributing
 
@@ -202,5 +202,6 @@ This configuration is provided as-is. OpenClaw itself is licensed separately - p
 
 - [NixOS Manual](https://nixos.org/manual/nixos/stable/)
 - [Nix Flakes](https://nixos.wiki/wiki/Flakes)
-- [OpenClaw Project](https://github.com/topic/openclaw) (search GitHub for the actual implementation)
+- [nix-openclaw](https://github.com/openclaw/nix-openclaw)
+- [OpenClaw upstream](https://github.com/openclaw/openclaw)
 - [GNOME Boxes](https://help.gnome.org/users/gnome-boxes/stable/)

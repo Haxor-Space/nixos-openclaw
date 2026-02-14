@@ -48,10 +48,10 @@ make check
 | File | Purpose |
 |------|---------|
 | `flake.nix` | Nix flake configuration |
-| `configuration.nix` | Main NixOS config (without openclaw) |
-| `configuration-with-openclaw.nix` | Alternative config with openclaw |
+| `configuration.nix` | Main NixOS config with OpenClaw AI |
+| `configuration-with-openclaw.nix` | Alternate config with OpenClaw AI |
 | `hardware-configuration.nix` | VM hardware settings |
-| `openclaw.nix` | Custom openclaw package |
+| `openclaw-documents/` | OpenClaw documents (AGENTS/SOUL/TOOLS) |
 | `build-vm.sh` | Build script |
 | `run-vm.sh` | Run script |
 
@@ -59,7 +59,7 @@ make check
 
 | Problem | Solution |
 |---------|----------|
-| OpenClaw not found | See OPENCLAW_NOTES.md |
+| OpenClaw not responding | See OPENCLAW_NOTES.md |
 | Build fails | See TROUBLESHOOTING.md |
 | Can't run VM | Check virtualization enabled |
 | Out of memory | Increase RAM in configuration.nix |

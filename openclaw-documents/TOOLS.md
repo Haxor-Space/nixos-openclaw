@@ -3,6 +3,7 @@
 Use the tools available in the VM environment.
 
 Common tools:
+
 - curl, wget
 - git
 - jq
