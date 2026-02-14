@@ -14,7 +14,7 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";
   # Use a stable LTS kernel to avoid modules-shrunk build issues
-  boot.kernelPackages = pkgs.linuxPackages_6_6 or pkgs.linuxPackages;
+  boot.kernelPackages = pkgs.linuxPackages_6_1 or pkgs.linuxPackages;
 
   # Hostname
   networking.hostName = "openclaw-vm";
