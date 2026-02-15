@@ -1,0 +1,8 @@
+keys:
+  - &nixclaw_age age1REPLACE_ME
+
+creation_rules:
+  - path_regex: secrets/secrets\.yaml$
+    key_groups:
+      - age:
+          - *nixclaw_age

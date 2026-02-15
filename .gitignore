@@ -19,6 +19,12 @@ result-*
 *~
 .*.swp
 
+# Decrypted secrets (never commit)
+/secrets/*.dec
+/secrets/*.yaml.dec
+/secrets/*.plain
+/secrets/*.tmp
+
 # OS-specific files
 .DS_Store
 Thumbs.db
