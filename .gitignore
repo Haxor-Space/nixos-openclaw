@@ -1,0 +1,33 @@
+# Build artifacts
+result
+result-*
+*.qcow2
+*.img
+*.iso
+
+# Nix build outputs
+/result
+/result-*
+
+# VM runtime files
+*.vdi
+*.vmdk
+
+# Temporary files
+*.log
+*.tmp
+*~
+.*.swp
+
+# Decrypted secrets (never commit)
+/secrets/*.dec
+/secrets/*.yaml.dec
+/secrets/*.plain
+/secrets/*.tmp
+
+# Encrypted secrets are stored in a private repo
+/secrets/secrets.yaml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
