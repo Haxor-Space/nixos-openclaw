@@ -46,7 +46,13 @@ sudo age-keygen -y /var/lib/sops-nix/key.txt
 sops secrets/secrets.yaml
 ```
 
-8. Apply the system configuration (choose one):
+8. Ensure the NixOS hardware config exists (default on fresh installs):
+
+```bash
+ls /etc/nixos/hardware-configuration.nix
+```
+
+9. Apply the system configuration (choose one):
 
 ```bash
 sudo nixos-rebuild switch --flake .#nixclaw-scout
@@ -54,7 +60,7 @@ sudo nixos-rebuild switch --flake .#nixclaw-scout
 
 Use `nixclaw-cron` or `nixclaw-trader` instead of `nixclaw-scout` if needed.
 
-9. Rollbacks:
+10. Rollbacks:
 
 ```bash
 sudo nixos-rebuild switch --rollback
