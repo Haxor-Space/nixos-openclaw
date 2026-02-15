@@ -1,4 +1,4 @@
-name: Build NixOS VM Image
+name: Validate NixOS Configuration
 
 on:
   push:
@@ -8,22 +8,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-vm:
+  validate:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    - name: Free disk space on runner
-      run: |
-        echo "Disk usage before cleanup:"
-        df -h
-        sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
-        sudo docker system prune -af || true
-        sudo apt-get clean
-        echo "Disk usage after cleanup:"
-        df -h
     
     - name: Install Nix
       uses: cachix/install-nix-action@v25
@@ -32,19 +22,9 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
 
-    - name: Validate flake lock file
+    - name: Validate flake
       run: |
-        if [ ! -f flake.lock ]; then
-          echo "::error::flake.lock is missing. Run 'nix flake lock' locally and commit flake.lock before CI builds."
-          exit 1
-        fi
-
-    - name: Upload flake lock file
-      uses: actions/upload-artifact@v4
-      with:
-        name: flake-lock
-        path: flake.lock
-        retention-days: 7
+        nix flake check --no-write-lock-file
     
     - name: Setup Cachix (optional)
       uses: cachix/cachix-action@v14
@@ -53,32 +33,14 @@ jobs:
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       continue-on-error: true
     
-    - name: Build VM configuration
+    - name: Build system configuration
       run: |
+        echo "Building NixOS system configuration..."
         nix build .#nixosConfigurations.openclaw-vm.config.system.build.toplevel -L --no-write-lock-file
-    
-    - name: Build QCOW2 image
+        echo "✓ Configuration builds successfully!"
+        
+    - name: Show system info
       run: |
-        nix build .#nixosConfigurations.openclaw-vm.config.system.build.qcow -L --no-write-lock-file
-      continue-on-error: true
-    
-    - name: Check build outputs
-      run: |
-        ls -lh result*
-    
-    - name: Create release artifact (if on main/master)
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      run: |
-        if [ -e result-qcow ]; then
-          cp -L result-qcow/nixos.qcow2 nixos-openclaw.qcow2 || true
-        fi
-    
-    - name: Upload VM image artifact
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      uses: actions/upload-artifact@v4
-      with:
-        name: nixos-openclaw-vm
-        path: |
-          nixos-openclaw.qcow2
-        retention-days: 30
-      continue-on-error: true
+        nix eval .#nixosConfigurations.openclaw-vm.config.system.nixos.label --raw
+        echo ""
+        nix path-info .#nixosConfigurations.openclaw-vm.config.system.build.toplevel
