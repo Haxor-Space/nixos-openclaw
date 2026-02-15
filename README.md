@@ -58,6 +58,20 @@ Add packages and services via workspace modules or the base role, then run:
 sudo nixos-rebuild switch --flake .#nixclaw-scout
 ```
 
+## Local CI loop (Codespace)
+
+Install tools once:
+
+```bash
+./scripts/setup-tools.sh
+```
+
+Run the same checks as the GitHub Actions workflow:
+
+```bash
+./scripts/ci-local.sh
+```
+
 ## Repo layout
 
 ```
