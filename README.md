@@ -46,10 +46,10 @@ sudo age-keygen -y /var/lib/sops-nix/key.txt
 sops secrets/secrets.yaml
 ```
 
-8. Ensure the NixOS hardware config exists (default on fresh installs):
+8. Replace the hardware config with your host-specific file:
 
 ```bash
-ls /etc/nixos/hardware-configuration.nix
+sudo cp /etc/nixos/hardware-configuration.nix nixos/hosts/hardware-configuration.nix
 ```
 
 9. Apply the system configuration (choose one):
