@@ -25,6 +25,9 @@ result-*
 /secrets/*.plain
 /secrets/*.tmp
 
+# Encrypted secrets are stored in a private repo
+/secrets/secrets.yaml
+
 # OS-specific files
 .DS_Store
 Thumbs.db

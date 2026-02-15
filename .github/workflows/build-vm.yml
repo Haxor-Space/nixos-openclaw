@@ -24,8 +24,6 @@ jobs:
 
     - name: Validate flake
       run: |
-        mkdir -p secrets
-        printf "openclaw_api_key: PLACEHOLDER\ngithub_token: PLACEHOLDER\n" > secrets/secrets.yaml
         nix flake check --no-write-lock-file
     
     - name: Setup Cachix (optional)

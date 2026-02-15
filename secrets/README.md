@@ -1,6 +1,8 @@
 # Secrets setup
 
-This repo uses sops-nix with age keys. Secrets are decrypted only at activation time and are never stored in the Nix store.
+This repo uses sops-nix with age keys. Secrets are optional; if you do not provide a secrets file, NixClaw will skip secrets setup entirely.
+
+For a public repo, keep secrets in a private repository and clone it into `secrets/` so the encrypted file exists locally but is not committed.
 
 ## Create the age key
 
@@ -22,6 +24,8 @@ Copy the public key into `.sops.yaml` under `age` recipients.
 ```bash
 sops secrets/secrets.yaml
 ```
+
+If your secrets repo lives elsewhere, set `nixclaw.secretsFile` in a host file to point at the encrypted file path.
 
 ## Validate decrypt on switch
 

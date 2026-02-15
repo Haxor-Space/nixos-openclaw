@@ -30,29 +30,13 @@ cd nixos-openclaw
 sed -n '1,200p' nixos/roles/openclaw-vm.nix
 ```
 
-5. Generate the age key and capture the public key:
-
-```bash
-sudo mkdir -p /var/lib/sops-nix
-sudo age-keygen -o /var/lib/sops-nix/key.txt
-sudo age-keygen -y /var/lib/sops-nix/key.txt
-```
-
-6. Add the public key to .sops.yaml recipients.
-
-7. Create the encrypted secrets file:
-
-```bash
-sops secrets/secrets.yaml
-```
-
-8. Replace the hardware config with your host-specific file:
+5. Replace the hardware config with your host-specific file:
 
 ```bash
 sudo cp /etc/nixos/hardware-configuration.nix nixos/hosts/hardware-configuration.nix
 ```
 
-9. Apply the system configuration (choose one):
+6. Apply the system configuration (choose one):
 
 ```bash
 sudo nixos-rebuild switch --flake .#nixclaw-scout
@@ -60,7 +44,7 @@ sudo nixos-rebuild switch --flake .#nixclaw-scout
 
 Use `nixclaw-cron` or `nixclaw-trader` instead of `nixclaw-scout` if needed.
 
-10. Rollbacks:
+7. Rollbacks:
 
 ```bash
 sudo nixos-rebuild switch --rollback
